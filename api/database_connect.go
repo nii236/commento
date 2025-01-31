@@ -2,11 +2,12 @@ package main
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"net/url"
 	"os"
 	"strconv"
 	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 func dbConnect(retriesLeft int) error {
@@ -19,7 +20,7 @@ func dbConnect(retriesLeft int) error {
 	u.User = url.UserPassword(u.User.Username(), "redacted")
 	logger.Infof("opening connection to postgres: %s", u.String())
 
-	db, err = sql.Open("postgres", con)
+	db, err = sql.Open("pgx", con)
 	if err != nil {
 		logger.Errorf("cannot open connection to postgres: %v", err)
 		return err
